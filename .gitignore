@@ -94,3 +94,7 @@ Thumbs.db
 # Temporary files
 tmp/
 temp/
+
+
+# others
+RENDER_DEPLOYMENT_GUIDE.md

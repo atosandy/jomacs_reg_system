@@ -1,0 +1,68 @@
+databases:
+  - name: reg-system-db
+    databaseName: reg_system
+    user: reg_system_user
+    plan: free
+    region: oregon
+    postgresMajorVersion: "15"
+
+services:
+  # Backend API Service
+  - type: web
+    name: reg-system-backend
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: ./server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DB_HOST
+        fromDatabase:
+          name: reg-system-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: reg-system-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: reg-system-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: reg-system-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: reg-system-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 24h
+      - key: FRONTEND_URL
+        fromService:
+          type: web
+          name: reg-system-frontend
+          property: host
+
+  # Frontend Static Site
+  - type: web
+    name: reg-system-frontend
+    runtime: static
+    plan: free
+    region: oregon
+    rootDir: ./client
+    buildCommand: npm install && npm run build
+    envVars:
+      - key: REACT_APP_API_URL
+        fromService:
+          type: web
+          name: reg-system-backend
+          property: host
