@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 5000;
 
 // cors configuration
 const corsOperations = {
-  origin: process.env.NODE_ENV === 'production' ? ['your-app-frontend.onrender.com'] : ['http://localhost:3000', 'http://localhost:3001'],
+  origin: process.env.NODE_ENV === 'production' ? ['https://jomacs-reg-system-frontend.onrender.com'] : ['http://localhost:3000', 'http://localhost:3001'],
   credentials: true,
   optionsSuccessStatus:200
 };
